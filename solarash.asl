@@ -11,6 +11,29 @@ gameState is an enum with the following values:
 state("Solar-Win64-Shipping")
 {
     byte gameState : 0x043E0158, 0x5E0;
+    string255 map : 0x0465F710, 0x428, 0x0;
+}
+
+init
+{
+    current.level = "";
+    current.loading = false;
+    vars.startOnGainControl = false;
+}
+
+update
+{
+    current.loading = current.gameState < 3;
+
+    if(!String.IsNullOrEmpty(current.map))
+    {
+        current.level = current.map;
+    }
+
+    if(current.level != old.level)
+    {
+        print("Level transition: "+old.level+" -> "+current.level);
+    }
 }
 
 startup
@@ -31,7 +54,21 @@ startup
     }
 }
 
+start
+{
+    if(current.level == "/Game/Maps/UltraVoid/UltraVoid" && old.level == "/Game/Maps/Cutscenes/Opening_Master")
+    {
+        vars.startOnGainControl = true;
+    }
+
+    if(vars.startOnGainControl && current.gameState == 4)
+    {
+        vars.startOnGainControl = false;
+        return true;
+    }
+}
+
 isLoading
 {
-    return current.gameState < 3;
+    return current.loading;
 }
