@@ -47,7 +47,7 @@ start
         vars.startOnGainControl = true;
     }
 
-    if(vars.startOnGainControl && current.gameState == 4)
+    if(vars.startOnGainControl && old.gameState == 3 && current.gameState == 4)
     {
         vars.startOnGainControl = false;
         return true;
