@@ -37,7 +37,7 @@ isLoading
 Since the `ASolarGameMode` class only gets instantiated once you load into a save file, this also pauses the timer in the main menu as a side effect.
 
 ### Timer Start
-The timer should start once you gain control of your character. This coincides with a change of `GameStatus` from `ESolarGameModeStatus__Cutscene` to `ESolarGameModeStatus__Gameplay`.
+The timer should start once you gain control of your character. This coincides with a change of `GameStatus` from `ESolarGameModeStatus__Cutscene` to `ESolarGameModeStatus__Gameplay`.  
 If the game is currently showing the opening cutscene, we set the script up to start the timer the next time the player gains control.
 ```c#
 start
