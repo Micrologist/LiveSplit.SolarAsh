@@ -38,7 +38,7 @@ Since the `ASolarGameMode` class only gets instantiated once you load into a sav
 
 ### Timer Start
 The timer should start once you gain control of your character. This coincides with a change of `GameStatus` from `ESolarGameModeStatus__Cutscene` to `ESolarGameModeStatus__Gameplay`.
-If the game is currently showing the opening cutscene, we set the script up to start the timer the next time this change occurs.
+If the game is currently showing the opening cutscene, we set the script up to start the timer the next time the player gains control.
 ```c#
 start
 {
@@ -52,5 +52,14 @@ start
         vars.startOnGainControl = false;
         return true;
     }
+}
+```
+
+### Timer Reset
+The timer should reset when the player starts a new save file and loads into the opening cutscene.
+```c#
+reset
+{
+    return current.map != old.map && current.map == "/Game/Maps/Cutscenes/Opening_Master";
 }
 ```
