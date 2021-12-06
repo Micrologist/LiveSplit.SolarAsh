@@ -1,5 +1,5 @@
 /*
-This script tracks the 'GameStatus' property of 'ASolarGameMode' as 'gameState'.
+'gameState' is the 'GameStatus' property of 'ASolarGameMode'
 The property is located at offset '0x530' inside its class.
 gameState is an enum with the following values:
 	ESolarGameModeStatus__Undefined = 0,
@@ -7,6 +7,8 @@ gameState is an enum with the following values:
 	ESolarGameModeStatus__Reloading = 2,
 	ESolarGameModeStatus__Cutscene = 3,
 	ESolarGameModeStatus__Gameplay = 4,
+'map' is the full path string name of the currently active map
+A pointer to that string is located at offset '0x428' inside the active map struct
 */
 state("Solar-Win64-Shipping")
 {
@@ -16,24 +18,7 @@ state("Solar-Win64-Shipping")
 
 init
 {
-    current.level = "";
-    current.loading = false;
     vars.startOnGainControl = false;
-}
-
-update
-{
-    current.loading = current.gameState < 3;
-
-    if(!String.IsNullOrEmpty(current.map))
-    {
-        current.level = current.map;
-    }
-
-    if(current.level != old.level)
-    {
-        print("Level transition: "+old.level+" -> "+current.level);
-    }
 }
 
 startup
@@ -56,7 +41,7 @@ startup
 
 start
 {
-    if(current.level == "/Game/Maps/UltraVoid/UltraVoid" && old.level == "/Game/Maps/Cutscenes/Opening_Master")
+    if(current.map == "/Game/Maps/Cutscenes/Opening_Master")
     {
         vars.startOnGainControl = true;
     }
@@ -70,5 +55,10 @@ start
 
 isLoading
 {
-    return current.loading;
+    return current.gameState < 3;
+}
+
+reset
+{
+    return current.map != old.map && current.map == "/Game/Maps/Cutscenes/Opening_Master";
 }
