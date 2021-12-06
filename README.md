@@ -16,8 +16,12 @@ enum class Solar_ESolarGameModeStatus : uint8_t
 	ESolarGameModeStatus__Gameplay = 4,
 	ESolarGameModeStatus__ESolarGameModeStatus_MAX = 5,
 };
-```
+```  
 
-`map`
-Tracks the full path name of the currently active map as a (UTF-16) `string`.
-A pointer to that string is located at offset `0x428` inside the active map struct.
+`map`  
+Tracks the full path name of the currently active map as a (UTF-16) `string`.  
+A pointer to that string is located at offset `0x428` inside the active map struct.  
+The following map names are of interest:
+- `/Game/Maps/TitleNMainMenu` - Main Menu
+- `/Game/Maps/Cutscenes/Opening_Master` - Opening Cutscene
+- `/Game/Maps/UltraVoid/UltraVoid` - Game World
