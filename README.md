@@ -2,7 +2,7 @@
 
 This script uses the following the values to determine the game's state:
 
-`gameState`  
+#### `gameState`  
 Tracks the `enum GameStatus` property of `ASolarGameMode` as `byte`.  
 The property is located at offset `0x530` inside its class.  
 The enum can have the following values:  
@@ -18,7 +18,7 @@ enum class Solar_ESolarGameModeStatus : uint8_t
 };
 ```  
 
-`map`  
+#### `map`  
 Tracks the full path name of the currently active map as a (UTF-16) `string`.  
 A pointer to that string is located at offset `0x428` inside the active map struct.  
 The following map names are of interest:
