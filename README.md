@@ -1,10 +1,11 @@
 ## Solar Ash ASL
 
-This script uses the `GameStatus` property of `ASolarGameMode` as `gameState` to determine whether the game is loading.
+This script uses the following the values to determine the game's state:
 
-The property is located at offset `0x530` inside its class.
-
-`gameState` is an enum with the following values:
+`gameState`  
+Tracks the `enum GameStatus` property of `ASolarGameMode` as `byte`.  
+The property is located at offset `0x530` inside its class.  
+The enum can have the following values:  
 ```c++
 enum class Solar_ESolarGameModeStatus : uint8_t
 {
@@ -16,3 +17,7 @@ enum class Solar_ESolarGameModeStatus : uint8_t
 	ESolarGameModeStatus__ESolarGameModeStatus_MAX = 5,
 };
 ```
+
+`map`
+Tracks the full path name of the currently active map as a (UTF-16) `string`.
+A pointer to that string is located at offset `0x428` inside the active map struct.
