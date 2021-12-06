@@ -25,3 +25,32 @@ The following map names are of interest:
 - `/Game/Maps/TitleNMainMenu` - Main Menu
 - `/Game/Maps/Cutscenes/Opening_Master` - Opening Cutscene
 - `/Game/Maps/UltraVoid/UltraVoid` - Game World
+
+### Load Removal
+The game is considered to be loading whenever the `GameStatus` is neither `ESolarGameModeStatus__Gameplay` nor `ESolarGameModeStatus__Cutscene`.
+```c#
+isLoading
+{
+    return current.gameState < 3;
+}
+```
+Since the `ASolarGameMode` class only gets instantiated once you load into a save file, this also pauses the timer in the main menu as a side effect.
+
+### Timer Start
+The timer should start once you gain control of your character. This coincides with a change of `GameStatus` from `ESolarGameModeStatus__Cutscene` to `ESolarGameModeStatus__Gameplay`.
+If the game is currently showing the opening cutscene, we set the script up to start the timer the next time this change occurs.
+```c#
+start
+{
+    if(current.map == "/Game/Maps/Cutscenes/Opening_Master")
+    {
+        vars.startOnGainControl = true;
+    }
+
+    if(vars.startOnGainControl && current.gameState == 4)
+    {
+        vars.startOnGainControl = false;
+        return true;
+    }
+}
+```
