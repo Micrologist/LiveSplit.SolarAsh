@@ -1,4 +1,4 @@
-## Solar Ash ASL
+# Solar Ash ASL
 
  - [Tracked Values] (#tracked-values)
  - [Load Removal] (#load-removal)
@@ -6,7 +6,7 @@
  - [Auto Splitting] (#auto-splitting)
  - [Timer Reset] (#timer-reset)
 
-### Tracked Values
+## Tracked Values
 
 This script uses the following the values to determine the game's state:
 
@@ -50,7 +50,7 @@ Since the array contains `FName`s we need to lookup the actual string representa
 
 The resulting string gets stored as `newestSaveFlag`.
 
-### Load Removal
+## Load Removal
 The game is considered to be loading whenever the `GameStatus` is neither `ESolarGameModeStatus__Gameplay` nor `ESolarGameModeStatus__Cutscene`.
 ```c#
 isLoading
@@ -60,7 +60,7 @@ isLoading
 ```
 Since the `ASolarGameMode` class only gets instantiated once you load into a save file, this also pauses the timer in the main menu as a side effect.
 
-### Timer Start
+## Timer Start
 The timer should start once you first gain control of your character after starting a new save file. This coincides with a change of `GameStatus` from `ESolarGameModeStatus__Cutscene` to `ESolarGameModeStatus__Gameplay`.  
 If the game is currently showing the opening cutscene, we set the script up to start the timer the next time the player gains control.
 ```c#
@@ -79,7 +79,7 @@ start
 }
 ```
 
-### Auto Splitting
+## Auto Splitting
 The script currently supports to types of split conditions.
 
 #### Boss Kills
@@ -118,7 +118,7 @@ if(settings["splitBadEnding"])
 ```
 
 
-### Timer Reset
+## Timer Reset
 The timer should reset when the player starts a new save file and loads into the opening cutscene.
 ```c#
 reset
