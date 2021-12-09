@@ -28,11 +28,16 @@ The following map names are of interest:
 
 #### `newestSaveFlag`
 In order to track game progression we read from `TArray<struct FName> SaveFlags`, located at offset `0x38` in `struct FSolarSaveData WorkingSaveData`.  
-(`WorkingSaveData` is found at offset `0x1C8` in `class USolarInstance`)  
-`TArray`s consist of a pointer to the start of the Array, as well as an `int` for the number items stored in the array.  
+(`WorkingSaveData` is found at offset `0x1C8` in `class USolarInstance`)
 
+
+`TArray`s consist of a pointer to the start of the Array, as well as an `int` for the number items stored in the array.  
 We track the pointer as `saveFlagPtr` and the amount of items as `saveFlagCount`.
+
+
 In order to save resources we don't actually parse the whole array but only look at the last (and newest) item of the array.
+
+
 Since the array contains `FName`s we need to lookup the actual string representation of each `FName` in the `FNamePool` using the function `vars.GetNameFromFName`. (Thanks to LongerWarrior for this function)  
 
 The resulting string gets stored as `newestSaveFlag`.
