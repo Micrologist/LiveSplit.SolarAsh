@@ -116,9 +116,6 @@ update
     {
         current.newestSaveFlag = vars.GetNameFromFName((IntPtr)current.saveFlagPtr+0x8*(current.saveFlagCount-1));
     }
-
-    vars.SetTextComponent("Newest Flag", current.newestSaveFlag);
-    vars.SetTextComponent("Num Flags", current.saveFlagCount.ToString());
 }
 
 start
