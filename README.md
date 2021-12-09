@@ -71,6 +71,45 @@ start
 }
 ```
 
+### Auto Splitting
+The script currently supports to types of split conditions.
+
+#### Boss Kills
+If the `splitOnBossKills` option is enabled, everytime the `newestSaveFlag` changes, we check to see if the new saveFlag is contained in List of Boss Kill flags (`vars.bossKillFlags`).  
+If it is, we trigger a split.
+```c#
+if(settings["splitOnBossKills"])
+{
+    if(current.newestSaveFlag != old.newestSaveFlag && vars.bossKillFlags.Contains(current.newestSaveFlag))
+    {
+        print("split for bosskill");
+        return true;
+    }
+}
+```
+
+#### Any% / Bad Ending
+Once the player loads back into the landing site during the bad ending, the save flags are essentially wiped, and a `DISABLE_SAVING` flag is triggered.  
+When another flag gets added to the SaveFlags array, we set the script up to split the next time the player loses control (`gameState` switches from `Gameplay` to `Cutscene`).
+```c#
+if(settings["splitBadEnding"])
+{
+    if(current.newestSaveFlag != old.newestSaveFlag && old.newestSaveFlag == "DISABLE_SAVING" && current.saveFlagCount == 2)
+    {
+        print("bad end detected, splitting on lose contro");
+        vars.splitOnLoseControl = true;
+    }
+
+    if(vars.splitOnLoseControl && current.gameState == 3 && old.gameState == 4)
+    {
+        vars.splitOnLoseControl = false;
+        print("splitting for bad ending");
+        return true;
+    }
+}
+```
+
+
 ### Timer Reset
 The timer should reset when the player starts a new save file and loads into the opening cutscene.
 ```c#
