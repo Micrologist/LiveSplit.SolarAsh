@@ -1,16 +1,16 @@
 # Solar Ash ASL
 
- - [Tracked Values] (#tracked-values)
- - [Load Removal] (#load-removal)
- - [Timer Start] (#timer-start)
- - [Auto Splitting] (#auto-splitting)
- - [Timer Reset] (#timer-reset)
+- [Tracked Values] (#tracked-values)
+- [Load Removal] (#load-removal)
+- [Timer Start] (#timer-start)
+- [Auto Splitting] (#auto-splitting)
+- [Timer Reset] (#timer-reset)
 
 ## Tracked Values
 
 This script uses the following the values to determine the game's state:
 
-#### `gameState`  
+### `gameState`  
 Tracks the `enum GameStatus` property of `ASolarGameMode` as `byte`.  
 The property is located at offset `0x530` inside its class.  
 The enum can have the following values:  
@@ -26,7 +26,7 @@ enum class Solar_ESolarGameModeStatus : uint8_t
 };
 ```  
 
-#### `map`  
+### `map`  
 Tracks the full path name of the currently active map as a (UTF-16) `string`.  
 A pointer to that string is located at offset `0x428` inside the active map struct.  
 The following map names are of interest:
@@ -34,7 +34,7 @@ The following map names are of interest:
 - `/Game/Maps/Cutscenes/Opening_Master` - Opening Cutscene
 - `/Game/Maps/UltraVoid/UltraVoid` - Game World
 
-#### `newestSaveFlag`
+### `newestSaveFlag`
 In order to track game progression we read from `TArray<struct FName> SaveFlags`, located at offset `0x38` in `struct FSolarSaveData WorkingSaveData`.  
 (`WorkingSaveData` is found at offset `0x1C8` in `class USolarInstance`)
 
@@ -82,7 +82,7 @@ start
 ## Auto Splitting
 The script currently supports to types of split conditions.
 
-#### Boss Kills
+### Boss Kills
 If the `splitOnBossKills` option is enabled, everytime the `newestSaveFlag` changes, we check to see if the new saveFlag is contained in List of Boss Kill flags (`vars.bossKillFlags`).  
 If it is, we trigger a split.
 ```c#
@@ -96,7 +96,7 @@ if(settings["splitOnBossKills"])
 }
 ```
 
-#### Any% / Bad Ending
+### Any% / Bad Ending
 Once the player loads back into the landing site during the bad ending, the save flags are essentially wiped, and a `DISABLE_SAVING` flag is triggered.  
 When another flag gets added to the SaveFlags array, we set the script up to split the next time the player loses control (`gameState` switches from `Gameplay` to `Cutscene`).
 ```c#
