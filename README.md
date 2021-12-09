@@ -1,10 +1,10 @@
 # Solar Ash ASL
 
-- [Tracked Values] (#tracked-values)
-- [Load Removal] (#load-removal)
-- [Timer Start] (#timer-start)
-- [Auto Splitting] (#auto-splitting)
-- [Timer Reset] (#timer-reset)
+- [Tracked Values](#tracked-values)
+- [Load Removal](#load-removal)
+- [Timer Start](#timer-start)
+- [Auto Splitting](#auto-splitting)
+- [Timer Reset](#timer-reset)
 
 ## Tracked Values
 
