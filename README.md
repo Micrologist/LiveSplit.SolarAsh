@@ -1,5 +1,13 @@
 ## Solar Ash ASL
 
+ - [Tracked Values] (#tracked-values)
+ - [Load Removal] (#load-removal)
+ - [Timer Start] (#timer-start)
+ - [Auto Splitting] (#auto-splitting)
+ - [Timer Reset] (#timer-reset)
+
+### Tracked Values
+
 This script uses the following the values to determine the game's state:
 
 #### `gameState`  
