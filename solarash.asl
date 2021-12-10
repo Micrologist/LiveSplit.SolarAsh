@@ -34,22 +34,6 @@ startup
             timer.CurrentTimingMethod = TimingMethod.GameTime;
         }
     }
-    
-    vars.SetTextComponent = (Action<string, string>)((id, text) =>
-	{
-        var textSettings = timer.Layout.Components.Where(x => x.GetType().Name == "TextComponent").Select(x => x.GetType().GetProperty("Settings").GetValue(x, null));
-        var textSetting = textSettings.FirstOrDefault(x => (x.GetType().GetProperty("Text1").GetValue(x, null) as string) == id);
-        if (textSetting == null)
-        {
-            var textComponentAssembly = Assembly.LoadFrom("Components\\LiveSplit.Text.dll");
-            var textComponent = Activator.CreateInstance(textComponentAssembly.GetType("LiveSplit.UI.Components.TextComponent"), timer);
-            timer.Layout.LayoutComponents.Add(new LiveSplit.UI.Components.LayoutComponent("LiveSplit.Text.dll", textComponent as LiveSplit.UI.Components.IComponent));
-            textSetting = textComponent.GetType().GetProperty("Settings", BindingFlags.Instance | BindingFlags.Public).GetValue(textComponent, null);
-            textSetting.GetType().GetProperty("Text1").SetValue(textSetting, id);
-        }
-        if (textSetting != null)
-            textSetting.GetType().GetProperty("Text2").SetValue(textSetting, text);
-	});
 
     vars.bossKillFlags = new List<string>(){
         "Vale_Starseed_Remnant",
@@ -143,7 +127,6 @@ split
     {
         if(current.newestSaveFlag != old.newestSaveFlag && vars.bossKillFlags.Contains(current.newestSaveFlag))
         {
-            print("split for bosskill");
             return true;
         }
     }
@@ -152,14 +135,12 @@ split
     {
         if(current.newestSaveFlag != old.newestSaveFlag && old.newestSaveFlag == "DISABLE_SAVING" && current.saveFlagCount == 2)
         {
-            print("bad end detected, splitting on lose contro");
             vars.splitOnLoseControl = true;
         }
 
         if(vars.splitOnLoseControl && current.gameState == 3 && old.gameState == 4)
         {
             vars.splitOnLoseControl = false;
-            print("splitting for bad ending");
             return true;
         }
 
