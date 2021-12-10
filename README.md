@@ -90,7 +90,6 @@ if(settings["splitOnBossKills"])
 {
     if(current.newestSaveFlag != old.newestSaveFlag && vars.bossKillFlags.Contains(current.newestSaveFlag))
     {
-        print("split for bosskill");
         return true;
     }
 }
@@ -104,14 +103,12 @@ if(settings["splitBadEnding"])
 {
     if(current.newestSaveFlag != old.newestSaveFlag && old.newestSaveFlag == "DISABLE_SAVING" && current.saveFlagCount == 2)
     {
-        print("bad end detected, splitting on lose contro");
         vars.splitOnLoseControl = true;
     }
 
     if(vars.splitOnLoseControl && current.gameState == 3 && old.gameState == 4)
     {
         vars.splitOnLoseControl = false;
-        print("splitting for bad ending");
         return true;
     }
 }
