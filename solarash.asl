@@ -44,8 +44,8 @@ startup
         "Shroom_Overflow_Remnant"
     };
 
-    settings.Add("splitOnBossKills", false, "Split after killing a boss");
-    settings.Add("splitBadEnding", false, "Split on Any% Ending");
+    settings.Add("splitOnBossKills", true, "Split after killing a boss");
+    settings.Add("splitBadEnding", true, "Split on Any% Ending");
 }
 
 
