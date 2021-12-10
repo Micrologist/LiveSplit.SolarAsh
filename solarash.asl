@@ -7,9 +7,16 @@ gameState is an enum with the following values:
 	ESolarGameModeStatus__Reloading = 2,
 	ESolarGameModeStatus__Cutscene = 3,
 	ESolarGameModeStatus__Gameplay = 4,
+
 'map' is the full path string name of the currently active map
 A pointer to that string is located at offset '0x428' inside the active map struct
+
+'saveFlagPtr' and 'saveFlagCount' track the state of the `GameFlags` array
+
+For full documentation see:
+https://github.com/Micrologist/LiveSplit.SolarAsh/blob/main/README.md
 */
+
 state("Solar-Win64-Shipping")
 {
     byte gameState : 0x043E0158, 0x5E0;
