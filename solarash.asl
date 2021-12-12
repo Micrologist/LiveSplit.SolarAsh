@@ -21,8 +21,8 @@ state("Solar-Win64-Shipping")
 {
     byte gameState : 0x043E0158, 0x5E0;
     string255 map : 0x0465F710, 0x428, 0x0;
-    int saveFlagCount : 0x044A14D8, 0x260, 0x208;
-    long saveFlagPtr : 0x044A14D8, 0x260, 0x200;
+    int saveFlagCount : 0x0465F710, 0x188, 0x208;
+    long saveFlagPtr : 0x0465F710, 0x188, 0x200;
 }
 
 startup
