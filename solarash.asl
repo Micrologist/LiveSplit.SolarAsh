@@ -174,7 +174,7 @@ split
             return true;
         }
 
-        if(vars.splitOnLoseControl && current.map == "/Game/Maps/TitleNMainMenu")
+        if(vars.splitOnLoseControl && (current.map == "/Game/Maps/TitleNMainMenu" || current.saveFlagCount > 10))
             vars.splitOnLoseControl = false;
     }
 }
