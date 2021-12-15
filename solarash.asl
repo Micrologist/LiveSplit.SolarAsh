@@ -17,13 +17,7 @@ For full documentation see:
 https://github.com/Micrologist/LiveSplit.SolarAsh/blob/main/README.md
 */
 
-state("Solar-Win64-Shipping")
-{
-    byte gameState : 0x043E0158, 0x5E0;
-    string255 map : 0x0465F710, 0x428, 0x0;
-    int saveFlagCount : 0x0465F710, 0x188, 0x208;
-    long saveFlagPtr : 0x0465F710, 0x188, 0x200;
-}
+state("Solar-Win64-Shipping"){}
 
 startup
 {
@@ -69,7 +63,7 @@ startup
 
     settings.Add("splitOnBossKills", true, "Split after killing a boss");
     settings.Add("splitBadEnding", true, "Split on Any% Ending");
-    settings.Add("debugTextComponents", false, "[DEBUG] Show values in layout");
+    settings.Add("debugTextComponents", false, "[DEBUG] Show tracked values in layout");
 }
 
 
@@ -82,6 +76,15 @@ init
         if (gameOffset == IntPtr.Zero) return IntPtr.Zero;
         int offset = game.ReadValue<int>((IntPtr)gameOffset+0x5);
         return (IntPtr)gameOffset+offset+0x9;
+    });
+
+    vars.GetUWorld = (Func<IntPtr>) (() => {	
+        var scanner = new SignatureScanner(game, modules.First().BaseAddress, (int)modules.First().ModuleMemorySize);
+        var pattern = new SigScanTarget("0F 2E ?? 74 ?? 48 8B 1D ?? ?? ?? ?? 48 85 DB 74");
+        var gameOffset = scanner.Scan(pattern);
+        if (gameOffset == IntPtr.Zero) return IntPtr.Zero;
+        int offset = game.ReadValue<int>((IntPtr)gameOffset+0x8);
+        return (IntPtr)gameOffset+offset+0xC;
     });
 
     vars.GetNameFromFName = (Func<IntPtr, string>) ( ptr => {
@@ -112,23 +115,45 @@ init
 
     vars.fNameDict = new Dictionary<long,string>();
     vars.FNamePool = vars.GetFNamePool();
-    if(vars.FNamePool == IntPtr.Zero)
+    vars.UWorld = vars.GetUWorld();
+
+    if(vars.FNamePool == IntPtr.Zero || vars.UWorld == IntPtr.Zero)
+    {
         throw new Exception("init not ready");
+    }
+
+    vars.watchers = new MemoryWatcherList
+    {
+        new MemoryWatcher<byte>(new DeepPointer(vars.UWorld, 0x128, 0x5E0)) { Name = "gameState" },
+        new MemoryWatcher<int>(new DeepPointer(vars.UWorld, 0x188, 0x208)) { Name = "saveFlagCount" },
+        new MemoryWatcher<long>(new DeepPointer(vars.UWorld, 0x188, 0x200)) { Name = "saveFlagPtr" },
+        new StringWatcher(new DeepPointer(vars.UWorld, 0x428, 0x0), 256) { Name = "map" }
+    };
 
     current.newestSaveFlag = "";
+    current.map = "";
+    current.playing = false;
+    current.gameState = 0;
 }
 
 update
 {
+    vars.watchers.UpdateAll(game);
+    current.gameState = vars.watchers["gameState"].Current;
+    current.saveFlagCount = vars.watchers["saveFlagCount"].Current;
+    current.map = !String.IsNullOrEmpty(vars.watchers["map"].Current) ? vars.watchers["map"].Current : current.map;
+    current.playing = (current.gameState == 3 || current.gameState == 4);
+
     if(current.saveFlagCount > 0)
     {
-        current.newestSaveFlag = vars.GetNameFromFName((IntPtr)current.saveFlagPtr+0x8*(current.saveFlagCount-1));
+        current.newestSaveFlag = vars.GetNameFromFName((IntPtr)vars.watchers["saveFlagPtr"].Current + 0x8 * (current.saveFlagCount-1));
     }
 
     if(settings["debugTextComponents"])
     {
         vars.SetTextComponent("Game State", current.gameState.ToString());
         vars.SetTextComponent("Newest Flag", current.newestSaveFlag);
+        vars.SetTextComponent("Map", current.map);
     }
 }
 
@@ -148,7 +173,7 @@ start
 
 isLoading
 {
-    return current.gameState < 3;
+    return !current.playing || current.map == "/Game/Maps/TitleNMainMenu";
 }
 
 split
